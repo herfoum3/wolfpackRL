@@ -1,7 +1,7 @@
 numpy
+gym
 scikit-learn 
 seaborn
 matplotlib
 pandas
 torch
-torchvision
