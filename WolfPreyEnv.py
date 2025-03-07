@@ -3,14 +3,15 @@ import numpy as np
 
 
 class WolfPreyEnv(gym.Env):
-    def __init__(self, grid_size=10, num_obstacles=10, reward_radius=2):
+    def __init__(self, grid_size=10, num_obstacles=10, num_wolves=2, reward_radius=2):
         
         self.grid_size = grid_size
+        self.num_wolves = num_wolves
         self.num_obstacles = num_obstacles
         self.reward_radius = reward_radius
         self.rewards = {
-          "radius" : 0,
-          "capture": 25
+          "radius" : 10,
+          "capture": 50
         }
                 
         # the grid positions take:
@@ -29,7 +30,7 @@ class WolfPreyEnv(gym.Env):
 
         # we place the 2 wolves
         self.wolf_positions = []
-        for _ in range(2):
+        for _ in range(self.num_wolves):
             while True:
                 pos = [np.random.randint(self.grid_size), np.random.randint(self.grid_size)]
                 if self.grid[pos[0], pos[1]] == 0 and pos not in self.wolf_positions:
@@ -108,60 +109,70 @@ class WolfPreyEnv(gym.Env):
             if zeros_connected():
                 break
             
-        for i in range(n):
-            print(self.grid[i])
-        print("grid OK:",zeros_connected())
+        print_grid = 0
+        if print_grid:    
+            for i in range(n):
+                print(self.grid[i])
+            print("grid OK:",zeros_connected())
         
-                 
-    def step(self, action1, action2):
+    def distance(self, pos1, pos2):
+        return np.linalg.norm(np.array(pos1) - np.array(pos2))
+    
+    def step(self, actions):
         """        
         Actions:  0: up, 1: down, 2: left, 3: right.
         Returns:  next observation, [reward_wolf1, reward_wolf2], done flag, info dict.
         """
-        actions = [action1, action2]
+        #actions = [action1, action2]
         new_positions = []
-        rewards = [0.0, 0.0]
+        rewards = [0.0]*self.num_wolves
         done = False
 
         wolves_in_radius = []
         # loop to process the actions
         for idx, action in enumerate(actions):
-            pos = self.wolf_positions[idx].copy()
+            curr_pos = self.wolf_positions[idx]
+            new_pos = curr_pos.copy()
             # moving to the new position based on the action 
             if action == 0: #up
-                pos[0] = max(0, pos[0] - 1)
+                new_pos[0] = max(0, new_pos[0] - 1)
             elif action == 1: #down
-                pos[0] = min(self.grid_size - 1, pos[0] + 1)
+                new_pos[0] = min(self.grid_size - 1, new_pos[0] + 1)
             elif action == 2: #left
-                pos[1] = max(0, pos[1] - 1)
+                new_pos[1] = max(0, new_pos[1] - 1)
             elif action == 3: #right
-                pos[1] = min(self.grid_size - 1, pos[1] + 1)
+                new_pos[1] = min(self.grid_size - 1, new_pos[1] + 1)
 
             # we check if it's an obstacle.
-            if self.grid[pos[0], pos[1]] == 1:
+            if self.grid[new_pos[0], new_pos[1]] == 1:
                 # we decided to add a penalty for hitting an obstacle
                 # then keep the wolf in place
-                reward = -1
-                pos = self.wolf_positions[idx]
+                reward = -2
+                new_pos = curr_pos
             else:
-                # and give a small time penalty
-                reward = -0.1 
-
+                current_distance = self.distance(curr_pos, self.prey_pos)
+                new_distance = self.distance(new_pos, self.prey_pos)
+                
+                if new_distance < current_distance:
+                    reward = 10*(1.0 - new_distance/self.grid_size) - new_distance/self.grid_size # small reward
+                else:
+                    reward = -1  # small time penalty if not improving
+        
             # here we reward the wolf when in a radius distance from the prey 
      
-            distance = np.linalg.norm(np.array(pos) - np.array(self.prey_pos))
+            distance = self.distance(new_pos, self.prey_pos)
             if distance <= self.reward_radius:
                 wolves_in_radius.append(idx)
-                reward += self.rewards.radius
+                #reward += self.rewards["radius"]
 
             rewards[idx] = reward
-            new_positions.append(pos)
+            new_positions.append(new_pos)
 
         # rewarding the wolves in radius if any captures the prey and the episode ends.
-        if any(pos == self.prey_pos for pos in new_positions):
+        if any(new_pos == self.prey_pos for new_pos in new_positions):
             n_wolves = len(wolves_in_radius)
             for idx in wolves_in_radius:
-                rewards[idx] += n_wolves * self.rewards.capture
+                rewards[idx] += n_wolves * self.rewards["capture"]
             #rewards = [r + 50 for r in rewards]
             done = True
             
@@ -180,5 +191,5 @@ class WolfPreyEnv(gym.Env):
         print(self._get_obs())
         
 if __name__ == '__main__':
-    env = WolfPreyEnv(grid_size=10, num_obstacles=15, reward_radius=2)
+    env = WolfPreyEnv(grid_size=10, num_obstacles=15, num_wolves=2, reward_radius=2)
 

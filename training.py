@@ -27,13 +27,14 @@ epsilon_decay = 300
 target_update = 10   
 buffer_capacity = 10000
 
-env = WolfPreyEnv(grid_size=10, num_obstacles=15, reward_radius=2)
+env = WolfPreyEnv(grid_size=7, num_obstacles=2, num_wolves=2, reward_radius=2)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_actions = env.action_space.n  # 4 actions per wolf.
 grid_size = env.grid_size
 
-wolf1 = Wolf(grid_size,n_actions,buffer_capacity,learning_rate)
-wolf2 = Wolf(grid_size,n_actions,buffer_capacity,learning_rate)
+wolves =[Wolf(grid_size,n_actions,buffer_capacity,learning_rate) for _ in range(env.num_wolves)]
+#wolf1 = Wolf(grid_size,n_actions,buffer_capacity,learning_rate)
+#wolf2 = Wolf(grid_size,n_actions,buffer_capacity,learning_rate)
 
 steps_done = 0
 
@@ -44,89 +45,72 @@ for episode in range(num_episodes):
     obs_processed = preprocess_observation(obs) 
     state = torch.tensor(obs_processed, device=device).unsqueeze(0)
     done = False
-    total_reward1 = 0
-    total_reward2 = 0
-
+    total_reward = [0]*env.num_wolves
+    
+    steps_in_episode = 0 
     while not done:
-        epsilon = epsilon_final + (epsilon_start - epsilon_final) * np.exp(-steps_done / epsilon_decay)
+        epsilon = epsilon_final + (epsilon_start - epsilon_final) * np.exp(-steps_done / epsilon_decay)      
         steps_done += 1
-
-        # wolf1 action ---
-        if np.random.random() < epsilon:
-            action1 = env.action_space.sample()
-        else:
-            with torch.no_grad():
-                q_values1 = wolf1.policy_net(state)
-                action1 = q_values1.max(1)[1].item()
-
-        # wolf2 action 
-        if np.random.random() < epsilon:
-            action2 = env.action_space.sample()
-        else:
-            with torch.no_grad():
-                q_values2 = wolf2.policy_net(state)
-                action2 = q_values2.max(1)[1].item()
-
+        steps_in_episode += 1
+        
+        actions = []
+        for wolf in wolves:        
+            if np.random.random() < epsilon:
+                action = env.action_space.sample()
+            else:
+                with torch.no_grad():
+                    q_values = wolf.policy_net(state)
+                    action = q_values.max(1)[1].item()
+            
+            actions.append(action)
+                        
         # wolfs interact with the env      
-        next_obs, rewards, done, _ = env.step(action1, action2)
-        reward1, reward2 = rewards
-        total_reward1 += reward1
-        total_reward2 += reward2
+        next_obs, rewards, done, _ = env.step(actions) 
+            
+        for i in range(env.num_wolves):
+            total_reward[i] += rewards[i]
 
         next_obs_processed = preprocess_observation(next_obs)
         next_state = torch.tensor(next_obs_processed, device=device).unsqueeze(0)
 
-        
-        wolf1.replay_buffer.push(state.cpu().numpy(), action1, reward1, next_state.cpu().numpy(), done)
-        wolf2.replay_buffer.push(state.cpu().numpy(), action2, reward2, next_state.cpu().numpy(), done)
+        for idx, wolf in enumerate(wolves):    
+            wolf.replay_buffer.push(state.cpu().numpy(), actions[idx], rewards[idx], next_state.cpu().numpy(), done)
 
         state = next_state
 
         
-        #updating wolf1
-        if len(wolf1.replay_buffer) > batch_size:
-            states, actions, rewards_batch, next_states, dones = wolf1.replay_buffer.sample(batch_size)
-            states = torch.tensor(states, device=device).squeeze(1) 
-            actions = torch.tensor(actions, device=device).unsqueeze(1)
-            rewards_batch = torch.tensor(rewards_batch, device=device,dtype=torch.float32).unsqueeze(1)
-            next_states = torch.tensor(next_states, device=device,dtype=torch.float32).squeeze(1)
-            dones = torch.tensor(dones, device=device).unsqueeze(1)
+        for wolf in wolves:    
+            #updating wolf1
+            if len(wolf.replay_buffer) > batch_size:
+                states, actions, rewards_batch, next_states, dones = wolf.replay_buffer.sample(batch_size)
+                states = torch.tensor(states, device=device).squeeze(1) 
+                actions = torch.tensor(actions, device=device).unsqueeze(1)
+                rewards_batch = torch.tensor(rewards_batch, device=device,dtype=torch.float32).unsqueeze(1)
+                next_states = torch.tensor(next_states, device=device,dtype=torch.float32).squeeze(1)
+                dones = torch.tensor(dones, device=device).unsqueeze(1)
 
-            current_q1 = wolf1.policy_net(states).gather(1, actions)
-            
-            with torch.no_grad():
-                next_q1 = wolf1.target_net(next_states).max(1)[0].unsqueeze(1)
-                target_q1 = rewards_batch + gamma * next_q1 * (1 - dones.float())
-            loss1 = F.mse_loss(current_q1, target_q1)
+                current_q = wolf.policy_net(states).gather(1, actions)
+                
+                with torch.no_grad():
+                    next_q = wolf.target_net(next_states).max(1)[0].unsqueeze(1)
+                    target_q = rewards_batch + gamma * next_q * (1 - dones.float())
+                loss = F.mse_loss(current_q, target_q)
 
-            wolf1.optimizer.zero_grad()
-            loss1.backward()
-            wolf1.optimizer.step()
+                wolf.optimizer.zero_grad()
+                loss.backward()
+                wolf.optimizer.step()
 
-        #updating wolf2
-        if len(wolf2.replay_buffer) > batch_size:
-            # Update Wolf 2.
-            states, actions, rewards_batch, next_states, dones = wolf2.replay_buffer.sample(batch_size)
-            states = torch.tensor(states, device=device).squeeze(1)
-            actions = torch.tensor(actions, device=device).unsqueeze(1)
-            rewards_batch = torch.tensor(rewards_batch, device=device,dtype=torch.float32).unsqueeze(1)
-            next_states = torch.tensor(next_states, device=device).squeeze(1)
-            dones = torch.tensor(dones, device=device).unsqueeze(1)
 
-            current_q2 = wolf2.policy_net(states).gather(1, actions)
-            with torch.no_grad():
-                next_q2 = wolf2.target_net(next_states).max(1)[0].unsqueeze(1)
-                target_q2 = rewards_batch + gamma * next_q2 * (1 - dones.float())
-            loss2 = F.mse_loss(current_q2, target_q2)
-
-            wolf2.optimizer.zero_grad()
-            loss2.backward()
-            wolf2.optimizer.step()
 
     # Update target networks periodically.
     if episode % target_update == 0:
-        wolf1.target_net.load_state_dict(wolf1.policy_net.state_dict())
-        wolf2.target_net.load_state_dict(wolf2.policy_net.state_dict())
+        for wolf in wolves:
+            wolf.target_net.load_state_dict(wolf.policy_net.state_dict())            
 
-    print(f"Episode: {episode}, Wolf1 Total Reward: {total_reward1:.2f}, Wolf2 Total Reward: {total_reward2:.2f}, Epsilon: {epsilon:.2f}")
+    print(f"Episode: {episode},", end=" ")
+    for idx, wolf in enumerate(wolves):
+        print(f"Wolf{idx+1} Total Reward: {total_reward[idx]:.2f},", end=" ")
+    print(f"Epsilon: {epsilon:.2f}, steps per episode: {steps_in_episode}")
+
+print("-->done")
 

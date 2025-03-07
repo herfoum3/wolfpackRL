@@ -6,15 +6,15 @@ class DQN(nn.Module):
         super(DQN, self).__init__()
         # we have 4 channels: free, obstacle, wolf, prey
         self.conv = nn.Sequential(
-            nn.Conv2d(4, 16, kernel_size=3, stride=1, padding=1), 
+            nn.Conv2d(4, 32, kernel_size=3, stride=1, padding=1), 
             nn.ReLU(),
-            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1), 
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1), 
             nn.ReLU()
         )
         self.fc = nn.Sequential(
-            nn.Linear(32 * grid_size * grid_size, 128),
+            nn.Linear(64 * grid_size * grid_size, 256),
             nn.ReLU(),
-            nn.Linear(128, n_actions) 
+            nn.Linear(256, n_actions) 
         )
 
     def forward(self, x):
