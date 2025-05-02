@@ -1,0 +1,4 @@
+repository "Wolfpack-dilemma_1@Seet@cloud"
+  path "/"
+    br "/main"
+    co "/main"

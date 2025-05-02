@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: bdf9fd42c6665a045bf5d894cf016f5a
+labels:
+- AllCreature
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78795
+  packageName: 'Poly Art: Wolf'
+  packageVersion: 3.9d
+  assetPath: Assets/Malbers Animations/Common/Shaders/HDRP_MalbersShaders 2020.unitypackage
+  uploadId: 624977

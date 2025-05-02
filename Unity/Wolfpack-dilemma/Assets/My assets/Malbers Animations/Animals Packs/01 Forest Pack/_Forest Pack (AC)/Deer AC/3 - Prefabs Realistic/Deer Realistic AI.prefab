@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8695828203150765172
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 598520974515788497, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158386694440815, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: onlyTargets.ConstantValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565511, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_Name
+      value: Deer Realistic AI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565513, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: internalComponents.Array.data[0].active
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.734
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565514, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565519, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: Editor_Tabs1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565519, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: Editor_Tabs2
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565519, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: isPlayer.ConstantValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387843565519, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: TurnMultiplier.ConstantValue
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387968127748, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
+      value: 0.22256523
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387968127748, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.11128262
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158387968127748, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_LODs.Array.data[2].screenRelativeHeight
+      value: 0.037094206
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158388397162995, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8206158388397163007, guid: 69b059064feab114f97546c1437a6074,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8206158387843565518, guid: 69b059064feab114f97546c1437a6074, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 69b059064feab114f97546c1437a6074, type: 3}

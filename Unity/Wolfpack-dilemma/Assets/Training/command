@@ -1,0 +1,4 @@
+[Run command inside `Assets` folder] 
+
+mlagents-learn Training/config/ppo/1.yaml --run-id=1 --train --results-dir=Training/results
+

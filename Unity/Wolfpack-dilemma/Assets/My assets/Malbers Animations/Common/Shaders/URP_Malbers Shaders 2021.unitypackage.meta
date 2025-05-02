@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 52748c438f56d2541be849f8f9e9d595
+labels:
+- AllCreature
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78795
+  packageName: 'Poly Art: Wolf'
+  packageVersion: 3.9d
+  assetPath: Assets/Malbers Animations/Common/Shaders/URP_Malbers Shaders 2021.unitypackage
+  uploadId: 624977

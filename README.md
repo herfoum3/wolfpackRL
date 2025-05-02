@@ -70,7 +70,7 @@ python train.py --episodes 100000 --reward wolfpack3
 ```
 
 ### Running 3D Simulation
-Open `3d_env/` in Unity Hub and follow ML-Agents instructions.
+Open `Unity/README.md` and follow the instructions.
 
 
 ## 5. Contributors

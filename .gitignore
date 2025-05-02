@@ -1,1 +1,23 @@
 __pycache__
+Unity/Wolfpack-dilemma/[Ll]ibrary/
+Unity/Wolfpack-dilemma/[Tt]emp/
+Unity/Wolfpack-dilemma/[Oo]bj/
+Unity/Wolfpack-dilemma/[Bb]uild/
+Unity/Wolfpack-dilemma/[Bb]uilds/
+Unity/Wolfpack-dilemma/[Ll]ogs/
+Unity/Wolfpack-dilemma/MemoryCaptures/
+
+
+Unity/Wolfpack-dilemma/.idea/
+Unity/Wolfpack-dilemma/*.sln
+Unity/Wolfpack-dilemma/*.csproj
+Unity/Wolfpack-dilemma/*.user
+Unity/Wolfpack-dilemma/*.pidb
+
+Unity/Wolfpack-dilemma/Packages/manifest.json
+Unity/Wolfpack-dilemma/Packages/packages-lock.json
+Unity/Wolfpack-dilemma/Library/
+Unity/Wolfpack-dilemma/Library/Artifacts/
+Unity/Wolfpack-dilemma/Library/PackageCache/
+
+"Unity/Wolfpack-dilemma/Assets/My assets/"

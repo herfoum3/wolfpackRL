@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 9d644f4490be222438977df25a7ad197
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78795
+  packageName: 'Poly Art: Wolf'
+  packageVersion: 3.9d
+  assetPath: Assets/Malbers Animations/Common/Shaders/Color4x2 Emission.shader
+  uploadId: 624977
