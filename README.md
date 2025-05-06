@@ -65,9 +65,8 @@ pip install -r requirements.txt
 ```
 
 ### Running 2D Training
-```bash
-python train.py --episodes 100000 --reward wolfpack3
-```
+To run the 2D training experiments, open and execute the notebooks available in the `2d_implementation/` folder. Each notebook corresponds to a different training setup or reward function variant.
+
 
 ### Running 3D Simulation
 Open `Unity/README.md` and follow the instructions.
